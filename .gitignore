@@ -53,7 +53,7 @@ btcusd_1-min_data.csv
 *.hdf5
 
 # Model files
-models/
+
 *.joblib
 *.model
 *.pkl
