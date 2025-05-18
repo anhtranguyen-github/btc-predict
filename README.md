@@ -57,7 +57,9 @@ bitcoin_trading/
 │   └── model_pipeline.py        # ML pipeline construction
 ├── dim_reduction/
 │   └── feature_reducer.py       # Dimensionality reduction techniques
-└── main.py                      # Main execution script
+├── train-1.py                   # Training script 1
+├── train-2.py                   # Training script 2
+└── __init__.py                  # Package marker (ensure exists)
 ```
 
 ## Usage
@@ -101,11 +103,20 @@ print(results)
 
 ### Running a Full Training Pipeline
 
+You can run the provided training scripts from the project root using the following commands:
+
 ```bash
-python -m bitcoin_trading.train-2.py
+python -m bitcoin_trading.train-1
+python -m bitcoin_trading.train-2
 ```
 
-This script will:
+**Guidelines:**
+- Always run these commands from the root directory of your project (the directory containing the `bitcoin_trading` folder).
+- Ensure that every package directory (e.g., `bitcoin_trading/`, `bitcoin_trading/models/`, etc.) contains an `__init__.py` file (can be empty) to mark it as a Python package.
+- If you encounter import errors, double-check your working directory and the presence of `__init__.py` files.
+- Use a virtual environment and install all dependencies from `requirements.txt` before running the scripts.
+
+These scripts will:
 1. Load the Bitcoin price data
 2. Process and clean the data
 3. Generate technical indicators
