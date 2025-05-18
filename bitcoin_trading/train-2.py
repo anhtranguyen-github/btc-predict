@@ -39,6 +39,12 @@ def main():
     df_train = indicators.create_target_signal(df_train)
     df_test = indicators.create_target_signal(df_test)
     
+    # Drop rows with NaN values (critical fix for model training)
+    print(f"\nBefore dropping NaN values: {len(df_train)} rows")
+    df_train = df_train.dropna()
+    df_test = df_test.dropna()
+    print(f"After dropping NaN values: {len(df_train)} rows")
+    
     # Get the models
     models_list = ModelFactory.create_models(n_estimators=25)
     

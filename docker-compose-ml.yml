@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # Real-time ML pipeline integrated with BinanceConsumer
+  binance-ml-consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile.ml
+    container_name: binance-ml-consumer
+    ports:
+      - 9091:8080  # Spark UI
+      - 7015:7077  # Spark Master
+      - 4011:4040  # Spark Application UI
+    environment:
+      SPARK_MASTER: "local[*]"
+      REDPANDA_BROKERS: "binance-redpanda:29092"
+      ASSET_PRICES_TOPIC: "data.asset_prices"
+      ASSET_SCHEMA_LOCATION: "/src/schemas/assets.avsc"
+      ASSET_CASSANDRA_HOST: "binance-cassandra"
+      ASSET_CASSANDRA_PORT: 9042
+      ASSET_CASSANDRA_USERNAME: "adminadmin"
+      ASSET_CASSANDRA_PASSWORD: "adminadmin"
+      ASSET_CASSANDRA_KEYSPACE: 'assets'
+      ASSET_CASSANDRA_TABLE: 'assets'
+      ASSET_PREDICTIONS_TABLE: 'predictions'
+      CHECKPOINT_DIR: "/tmp/checkpoint"
+      ML_CHECKPOINT_DIR: "/tmp/ml-checkpoints"
+      MODEL_OUTPUT_PATH: "/models"
+    volumes:
+      - ./checkpoint:/tmp/checkpoint  # Persist checkpoint data
+      - ./ml-checkpoints:/tmp/ml-checkpoints  # Persist ML checkpoint data
+      - ./models:/models  # Persist trained models
+    depends_on:
+      binance-redpanda:
+        condition: service_healthy
+      binance-cassandra:
+        condition: service_healthy
+  
+  # Optional: Scalable worker nodes for ML pipeline
+  binance-ml-worker-1:
+    build:
+      context: .
+      dockerfile: SparkMLWorker.Dockerfile
+    container_name: binance-ml-worker-1
+    ports:
+      - 8042:8081
+    depends_on:
+      - binance-ml-consumer
+    environment:
+      SPARK_MODE: worker
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
+      SPARK_MASTER_URL: spark://binance-ml-consumer:7077
+
+  # Related services (for reference - typically already defined in main docker-compose)
+  binance-redpanda:
+    image: redpandadata/redpanda:v23.2.19
+    container_name: binance-redpanda
+    ports:
+      - 9092:9092
+      - 19092:19092
+      - 9644:9644
+    environment:
+      - REDPANDA_RPC_SERVER_LISTEN_ADDR=0.0.0.0
+      - REDPANDA_SEED_SERVERS=[]
+      - REDPANDA_ADVERTISED_KAFKA_ADDR=binance-redpanda:29092
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -q 'Healthy: true'"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  binance-cassandra:
+    image: cassandra:4.1.3
+    container_name: binance-cassandra
+    ports:
+      - 9042:9042
+    environment:
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+      - CASSANDRA_USERNAME=adminadmin
+      - CASSANDRA_PASSWORD=adminadmin
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "adminadmin", "-p", "adminadmin", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  cassandra_data: 
