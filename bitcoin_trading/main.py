@@ -8,8 +8,8 @@ import pytz
 
 from bitcoin_trading.data.data_loader import BitcoinDataLoader
 from bitcoin_trading.features.technical_indicators import TechnicalIndicators
-from bitcoin_trading.models.model_factory import ModelFactory
-from bitcoin_trading.models.model_evaluator import ModelEvaluator
+from bitcoin_trading.model_core.model_factory import ModelFactory
+from bitcoin_trading.model_core.model_evaluator import ModelEvaluator
 from bitcoin_trading.features.feature_importance import FeatureImportanceAnalyzer
 from bitcoin_trading.dim_reduction.feature_reducer import FeatureReducer
 
