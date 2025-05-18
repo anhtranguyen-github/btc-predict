@@ -1,0 +1,104 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env/
+.venv/
+.python-version
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.spyderproject
+.spyproject
+.ropeproject
+.DS_Store
+
+# Data files
+data/*.csv
+*.csv
+btcusd_1-min_data.csv
+*.parquet
+*.pkl
+*.h5
+*.hdf5
+
+# Model files
+models/
+*.joblib
+*.model
+*.pkl
+*.keras
+*.h5
+*.pt
+*.pth
+*.onnx
+catboost_info/
+
+# Logs
+logs/
+*.log
+*.log.*
+wandb/
+mlruns/
+tensorboard_logs/
+
+# Unit test and coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Cassandra
+cassandra_data/
+
+# Config files that might contain secrets
+config.ini
+.env
+secrets.json
+credentials.json
+
+# Compiled output and distribution folders
+dist/
+build/
+
+# Local development settings
+.local/
+
+# Temporary files
+tmp/
+temp/ 
