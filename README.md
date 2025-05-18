@@ -29,17 +29,41 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Dependencies
+### Quick implements
 
-- Python 3.8+
-- pandas
-- numpy
-- scikit-learn
-- matplotlib
-- seaborn
-- xgboost
-- catboost
-- shap (for feature importance analysis)
+Follow these steps to quickly set up and run the Bitcoin Trading ML system:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/anhtranguyen-github/btc-predict
+   cd bitcoin-trading
+   ```
+
+2. **Create and activate a virtual environment (recommended):**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   - Requires Python 3.8+
+
+4. **Check package structure:**
+   - Ensure all folders (e.g., `bitcoin_trading/`, `bitcoin_trading/models/`) contain an `__init__.py` file.
+
+5. **Run training scripts from the project root:**
+   ```bash
+   python -m bitcoin_trading.train-1
+   python -m bitcoin_trading.train-2
+   ```
+
+   - These scripts will load data, process features, train models, and output results.
+
+**Tip:** If you encounter import errors, double-check your working directory and the presence of `__init__.py` files in all package folders.
 
 ## Project Structure
 
